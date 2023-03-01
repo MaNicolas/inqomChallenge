@@ -2,6 +2,7 @@ const { test, expect } = require('@playwright/test');
 import { loginPageObject } from '../pages/LoginPageObject';
 import { HeaderPageObject } from '../pages/HeaderPageObject';
 import { AccountPageObject } from '../pages/AccountPageObject';
+import { Credentials } from './fixtures/Credentials.json';
 
 test.beforeEach(async ({ page, baseURL }) => {
     //Visit page
@@ -13,7 +14,10 @@ test.beforeEach(async ({ page, baseURL }) => {
 test('login and upload test', async function ({ page, browserName, baseURL }) {
     //Fill email and password, then click on "Se connecter"
     const loginPage = new loginPageObject(page);
-    loginPage.login('inqom.qaautomationapplicant@gmail.com', 'o5N,d5ZR@R7^');
+    await page.pause();
+    for (let i = 0; i < Credentials.length; i++) {
+        loginPage.login(Credentials[i].username, Credentials[i].password);
+    }
 
     //Go to account page
     const headerPage = new HeaderPageObject(page, baseURL);
